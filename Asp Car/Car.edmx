@@ -1,0 +1,201 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="CarsModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Body">
+          <Key>
+            <PropertyRef Name="Body_id" />
+          </Key>
+          <Property Name="Body_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="BodyType" Type="nchar" MaxLength="10" />
+          <Property Name="Doors" Type="nchar" MaxLength="10" />
+        </EntityType>
+        <EntityType Name="Engine">
+          <Key>
+            <PropertyRef Name="Engine_id" />
+          </Key>
+          <Property Name="Engine_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nchar" MaxLength="10" />
+          <Property Name="Rpm" Type="nchar" MaxLength="10" />
+        </EntityType>
+        <EntityType Name="Main">
+          <Key>
+            <PropertyRef Name="Car_id" />
+          </Key>
+          <Property Name="Car_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Engine_id" Type="int" />
+          <Property Name="Color" Type="nchar" MaxLength="10" />
+          <Property Name="Name" Type="nchar" MaxLength="10" />
+          <Property Name="Make" Type="nchar" MaxLength="10" />
+          <Property Name="Year" Type="nchar" MaxLength="10" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="u_id" />
+          </Key>
+          <Property Name="u_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Username" Type="nchar" MaxLength="10" />
+          <Property Name="Password" Type="nchar" MaxLength="10" />
+        </EntityType>
+        <Association Name="FK_Main_Engine">
+          <End Role="Engine" Type="Self.Engine" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Main" Type="Self.Main" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Engine">
+              <PropertyRef Name="Engine_id" />
+            </Principal>
+            <Dependent Role="Main">
+              <PropertyRef Name="Engine_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="CarsModelStoreContainer">
+          <EntitySet Name="Body" EntityType="Self.Body" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Engine" EntityType="Self.Engine" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Main" EntityType="Self.Main" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="User" EntityType="Self.User" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Main_Engine" Association="Self.FK_Main_Engine">
+            <End Role="Engine" EntitySet="Engine" />
+            <End Role="Main" EntitySet="Main" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="CarsModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Body">
+          <Key>
+            <PropertyRef Name="Body_id" />
+          </Key>
+          <Property Name="Body_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="BodyType" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="Doors" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+        </EntityType>
+        <EntityType Name="Engine">
+          <Key>
+            <PropertyRef Name="Engine_id" />
+          </Key>
+          <Property Name="Engine_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="Rpm" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <NavigationProperty Name="Mains" Relationship="Self.FK_Main_Engine" FromRole="Engine" ToRole="Main" />
+        </EntityType>
+        <EntityType Name="Main">
+          <Key>
+            <PropertyRef Name="Car_id" />
+          </Key>
+          <Property Name="Car_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Engine_id" Type="Int32" />
+          <Property Name="Color" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="Name" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="Make" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="Year" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <NavigationProperty Name="Engine" Relationship="Self.FK_Main_Engine" FromRole="Main" ToRole="Engine" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="u_id" />
+          </Key>
+          <Property Name="u_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Username" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="Password" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+        </EntityType>
+        <Association Name="FK_Main_Engine">
+          <End Role="Engine" Type="Self.Engine" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Main" Type="Self.Main" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Engine">
+              <PropertyRef Name="Engine_id" />
+            </Principal>
+            <Dependent Role="Main">
+              <PropertyRef Name="Engine_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="CarsEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Bodies" EntityType="Self.Body" />
+          <EntitySet Name="Engines" EntityType="Self.Engine" />
+          <EntitySet Name="Mains" EntityType="Self.Main" />
+          <EntitySet Name="Users" EntityType="Self.User" />
+          <AssociationSet Name="FK_Main_Engine" Association="Self.FK_Main_Engine">
+            <End Role="Engine" EntitySet="Engines" />
+            <End Role="Main" EntitySet="Mains" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="CarsModelStoreContainer" CdmEntityContainer="CarsEntities">
+          <EntitySetMapping Name="Bodies">
+            <EntityTypeMapping TypeName="CarsModel.Body">
+              <MappingFragment StoreEntitySet="Body">
+                <ScalarProperty Name="Body_id" ColumnName="Body_id" />
+                <ScalarProperty Name="BodyType" ColumnName="BodyType" />
+                <ScalarProperty Name="Doors" ColumnName="Doors" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Engines">
+            <EntityTypeMapping TypeName="CarsModel.Engine">
+              <MappingFragment StoreEntitySet="Engine">
+                <ScalarProperty Name="Engine_id" ColumnName="Engine_id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Rpm" ColumnName="Rpm" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Mains">
+            <EntityTypeMapping TypeName="CarsModel.Main">
+              <MappingFragment StoreEntitySet="Main">
+                <ScalarProperty Name="Car_id" ColumnName="Car_id" />
+                <ScalarProperty Name="Engine_id" ColumnName="Engine_id" />
+                <ScalarProperty Name="Color" ColumnName="Color" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Make" ColumnName="Make" />
+                <ScalarProperty Name="Year" ColumnName="Year" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Users">
+            <EntityTypeMapping TypeName="CarsModel.User">
+              <MappingFragment StoreEntitySet="User">
+                <ScalarProperty Name="u_id" ColumnName="u_id" />
+                <ScalarProperty Name="Username" ColumnName="Username" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
